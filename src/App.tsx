@@ -12,10 +12,6 @@ import { JettonInfo } from '@ton-api/client';
 import { fromNano } from './utils/decimals';
 import { UserClaim } from './types/airdrop';
 
-const ta = new TonApiClient({
-    baseUrl: import.meta.env.VITE_TONAPI_ENDPOINT ?? 'https://tonapi.io',
-});
-
 function useQuery() {
     return useMemo(() => new URLSearchParams(window.location.search), []);
 }
@@ -32,6 +28,11 @@ function App() {
     const [tonConnectUI] = useTonConnectUI();
 
     const claimId = query.get('claimId') ?? import.meta.env.VITE_CLAIM_UUID;
+    const testnet = query.get('testnet') ?? import.meta.env.VITE_TESTNET;
+
+    const ta = useMemo(() => new TonApiClient({
+        baseUrl: testnet ? 'https://testnet.tonapi.io' : 'https://tonapi.io',
+    }), [testnet]);
 
     const connectedAddress = useTonAddress();
 
@@ -50,12 +51,12 @@ function App() {
         ta.jettons
             .getJettonInfo(Address.parse(jettonAddress))
             .then(setJettonInfo);
-    }, [jettonAddress]);
+    }, [jettonAddress, ta]);
 
     useEffect(() => {
         if (connectedAddress) {
             fetch(
-                `https://mainnet-airdrop.tonapi.io/v1/airdrop/claim/${connectedAddress}?id=${claimId}`
+                `https://${testnet ? 'testnet-airdrop' : 'mainnet-airdrop'}.tonapi.io/v1/airdrop/claim/${connectedAddress}?id=${claimId}`
             )
                 .then((response) => response.json())
                 .then((userClaim: UserClaim) => {
@@ -72,7 +73,7 @@ function App() {
             setClaimStatusLoading(false);
             setUserClaim(null);
         }
-    }, [connectedAddress, claimId]);
+    }, [connectedAddress, claimId, testnet]);
 
     const handleSendMessage = useCallback(() => {
         if (!userClaim) {
