@@ -7,7 +7,7 @@ import './index.css';
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <TonConnectUIProvider manifestUrl="https://not-burn.tonkeeper.com/manifest.json">
+        <TonConnectUIProvider manifestUrl="https://tonkeeper.github.io/airdrop-reference-dapp/manifest.json">
             <TonConnectButton className="tonconnectButton" />
             <App />
         </TonConnectUIProvider>
