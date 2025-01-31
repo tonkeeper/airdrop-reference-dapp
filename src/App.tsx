@@ -56,7 +56,7 @@ function App() {
     useEffect(() => {
         if (connectedAddress) {
             fetch(
-                `https://${testnet ? 'testnet-airdrop' : 'mainnet-airdrop'}.tonapi.io/v1/airdrop/claim/${connectedAddress}?id=${claimId}`
+                `https://${testnet ? 'testnet-airdrop' : 'mainnet-airdrop'}.tonapi.io/v1/airdrop/claim/${connectedAddress}?id=${airdropId}`
             )
                 .then((response) => response.json())
                 .then((userClaim: UserClaim) => {
