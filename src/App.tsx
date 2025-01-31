@@ -27,7 +27,7 @@ function App() {
 
     const [tonConnectUI] = useTonConnectUI();
 
-    const claimId = query.get('claimId') ?? import.meta.env.VITE_CLAIM_UUID;
+    const airdropId = query.get('airdropId') ?? import.meta.env.VITE_AIRDROP_UUID;
     const testnet = query.get('testnet') ?? import.meta.env.VITE_TESTNET;
 
     const ta = useMemo(() => new TonApiClient({
@@ -73,7 +73,7 @@ function App() {
             setClaimStatusLoading(false);
             setUserClaim(null);
         }
-    }, [connectedAddress, claimId, testnet]);
+    }, [connectedAddress, airdropId, testnet]);
 
     const handleSendMessage = useCallback(() => {
         if (!userClaim) {
@@ -98,11 +98,11 @@ function App() {
             });
     }, [tonConnectUI, userClaim]);
 
-    if (!claimId) {
+    if (!airdropId) {
         return (
             <div className="placeholder">
                 <div className="body1 secondary">
-                    Claim ID is not provided.
+                    Airdrop ID is not provided.
                 </div>
             </div>
         );
